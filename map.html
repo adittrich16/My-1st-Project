@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Treasure Map — Austin Dittrich</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #1a0f05;
+      background-image:
+        radial-gradient(ellipse at 20% 30%, rgba(60,30,10,0.8) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 75%, rgba(40,20,5,0.7) 0%, transparent 50%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      font-family: 'IM Fell English', Georgia, serif;
+    }
+
+    .map-wrapper {
+      filter:
+        drop-shadow(0 14px 55px rgba(0,0,0,0.95))
+        drop-shadow(0 4px 18px rgba(0,0,0,0.7));
+      max-width: 720px;
+      width: 100%;
+    }
+
+    svg { width: 100%; height: auto; display: block; }
+
+    a.back-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: rgba(201,151,58,0.65);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    a.back-link:hover { color: #c9973a; }
+  </style>
+</head>
+<body>
+
+  <div class="map-wrapper">
+    <svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg"
+         font-family="'IM Fell English', Georgia, serif">
+      <defs>
+
+        <!-- Parchment base gradient -->
+        <linearGradient id="parchment" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#fdf6de"/>
+          <stop offset="30%"  stop-color="#f5e4b0"/>
+          <stop offset="65%"  stop-color="#ebce82"/>
+          <stop offset="100%" stop-color="#debb68"/>
+        </linearGradient>
+
+        <!-- Age spots -->
+        <radialGradient id="sp1" cx="12%" cy="18%" r="28%">
+          <stop offset="0%" stop-color="#8b5a28" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#8b5a28" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="sp2" cx="88%" cy="82%" r="25%">
+          <stop offset="0%" stop-color="#6b3a10" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="#6b3a10" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="sp3" cx="68%" cy="8%" r="22%">
+          <stop offset="0%" stop-color="#7a4818" stop-opacity="0.16"/>
+          <stop offset="100%" stop-color="#7a4818" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="sp4" cx="30%" cy="94%" r="18%">
+          <stop offset="0%" stop-color="#7a4818" stop-opacity="0.13"/>
+          <stop offset="100%" stop-color="#7a4818" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Ocean -->
+        <linearGradient id="ocean" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#9bbdcc"/>
+          <stop offset="100%" stop-color="#7aa0b5"/>
+        </linearGradient>
+
+        <!-- Island fill -->
+        <radialGradient id="isle" cx="45%" cy="42%" r="55%">
+          <stop offset="0%"   stop-color="#7aaa58"/>
+          <stop offset="65%"  stop-color="#5a8a38"/>
+          <stop offset="100%" stop-color="#4a7228"/>
+        </radialGradient>
+
+        <!-- Cartography grid pattern -->
+        <pattern id="grid" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M 50 0 L 0 0 0 50" fill="none"
+                stroke="rgba(139,98,52,0.1)" stroke-width="0.7"/>
+        </pattern>
+
+        <!-- Ocean wave pattern -->
+        <pattern id="waves" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 0,10 C 6,6 12,14 20,10 C 28,6 34,14 40,10"
+                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+        </pattern>
+
+        <!-- Torn edge clip path (all 4 sides jagged) -->
+        <clipPath id="torn">
+          <path d="
+            M 0,4  L 20,1  L 40,5  L 60,2  L 80,6  L 100,1 L 120,4
+            L 140,0 L 160,5 L 180,2 L 200,4 L 220,1 L 240,5 L 260,2
+            L 280,4 L 300,0 L 320,5 L 340,2 L 360,4 L 380,1 L 400,5
+            L 420,2 L 440,4 L 460,1 L 480,5 L 500,2 L 520,4 L 540,1
+            L 560,5 L 580,2 L 600,4 L 620,1 L 640,5 L 660,2 L 680,4
+            L 700,3
+            L 698,30  L 700,60  L 697,90  L 700,120 L 698,150 L 700,180
+            L 697,210 L 700,240 L 698,270 L 700,300 L 697,330 L 700,360
+            L 698,390 L 700,420 L 697,450 L 700,480 L 698,510 L 700,537
+            L 680,540 L 660,536 L 640,540 L 620,537 L 600,540 L 580,536
+            L 560,540 L 540,537 L 520,540 L 500,536 L 480,540 L 460,537
+            L 440,540 L 420,536 L 400,540 L 380,537 L 360,540 L 340,536
+            L 320,540 L 300,537 L 280,540 L 260,536 L 240,540 L 220,537
+            L 200,540 L 180,536 L 160,540 L 140,537 L 120,540 L 100,536
+            L 80,540  L 60,537  L 40,540  L 20,536  L 0,539
+            L 3,510 L 0,480 L 2,450 L 0,420 L 3,390 L 0,360 L 2,330
+            L 0,300 L 3,270 L 0,240 L 2,210 L 0,180 L 3,150 L 0,120
+            L 2,90  L 0,60  L 3,30  L 0,4 Z
+          "/>
+        </clipPath>
+
+      </defs>
+
+      <!-- ══ Everything inside torn parchment edges ══ -->
+      <g clip-path="url(#torn)">
+
+        <!-- Parchment base & age spots -->
+        <rect width="700" height="540" fill="url(#parchment)"/>
+        <rect width="700" height="540" fill="url(#sp1)"/>
+        <rect width="700" height="540" fill="url(#sp2)"/>
+        <rect width="700" height="540" fill="url(#sp3)"/>
+        <rect width="700" height="540" fill="url(#sp4)"/>
+
+        <!-- Cartography grid -->
+        <rect width="700" height="540" fill="url(#grid)"/>
+
+        <!-- Double map border -->
+        <rect x="14" y="14" width="672" height="512" fill="none"
+              stroke="#8b6234" stroke-width="1.5" stroke-opacity="0.5"/>
+        <rect x="20" y="20" width="660" height="500" fill="none"
+              stroke="#8b6234" stroke-width="0.6" stroke-opacity="0.3"/>
+
+        <!-- ── OCEAN ── -->
+        <rect width="700" height="540" fill="url(#ocean)" opacity="0.45"/>
+        <rect width="700" height="540" fill="url(#waves)" opacity="0.65"/>
+
+        <!-- Ocean legend text -->
+        <text x="68" y="108" fill="rgba(55,90,115,0.55)" font-size="11"
+              font-style="italic" transform="rotate(-8,68,108)">Here Be Monsters</text>
+
+        <!-- Sea serpent squiggle -->
+        <path d="M 52,128 C 64,116 76,132 88,122 C 98,112 105,126 114,119"
+              fill="none" stroke="rgba(55,90,115,0.45)" stroke-width="1.8"
+              stroke-linecap="round"/>
+        <ellipse cx="116" cy="118" rx="4" ry="3"
+                 fill="rgba(55,90,115,0.45)" transform="rotate(-20,116,118)"/>
+
+        <text x="530" y="455" fill="rgba(55,90,115,0.4)" font-size="9.5"
+              font-style="italic" transform="rotate(5,530,455)">Uncharted Waters</text>
+
+        <!-- ── ISLAND ── -->
+
+        <!-- Beach ring (wider, sandy) -->
+        <path d="M 148,268
+                 C 128,196 155,122 222,98
+                 C 266,80 320,85 376,98
+                 C 428,108 468,142 484,198
+                 C 500,244 496,300 472,344
+                 C 452,384 414,412 357,424
+                 C 308,434 253,426 212,406
+                 C 166,384 154,334 148,268 Z"
+              fill="#d4b866" opacity="0.65"/>
+
+        <!-- Island body -->
+        <path d="M 155,268
+                 C 136,198 162,126 226,103
+                 C 269,85 321,90 376,102
+                 C 426,112 464,146 480,201
+                 C 496,246 491,298 469,340
+                 C 449,379 413,406 357,418
+                 C 309,428 255,420 215,402
+                 C 172,383 158,332 155,268 Z"
+              fill="url(#isle)" stroke="#4a7228" stroke-width="1.5"/>
+
+        <!-- Shoreline highlight -->
+        <path d="M 155,268
+                 C 136,198 162,126 226,103
+                 C 269,85 321,90 376,102
+                 C 426,112 464,146 480,201
+                 C 496,246 491,298 469,340
+                 C 449,379 413,406 357,418
+                 C 309,428 255,420 215,402
+                 C 172,383 158,332 155,268 Z"
+              fill="none" stroke="#d4b866" stroke-width="5" stroke-opacity="0.35"/>
+
+        <!-- ── TREES ── -->
+
+        <!-- NW cluster -->
+        <g fill="#265018" stroke="#163008" stroke-width="0.6">
+          <polygon points="200,150 192,173 208,173"/>
+          <rect x="198" y="173" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="220,136 212,159 228,159"/>
+          <rect x="218" y="159" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="240,144 232,167 248,167"/>
+          <rect x="238" y="167" width="4" height="6" fill="#5a3010" stroke="none"/>
+
+          <polygon points="252,130 244,153 260,153"/>
+          <rect x="250" y="153" width="4" height="6" fill="#5a3010" stroke="none"/>
+        </g>
+
+        <!-- NE cluster -->
+        <g fill="#265018" stroke="#163008" stroke-width="0.6">
+          <polygon points="390,118 382,141 398,141"/>
+          <rect x="388" y="141" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="410,130 402,153 418,153"/>
+          <rect x="408" y="153" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="428,148 420,171 436,171"/>
+          <rect x="426" y="171" width="4" height="6" fill="#5a3010" stroke="none"/>
+        </g>
+
+        <!-- SW cluster -->
+        <g fill="#265018" stroke="#163008" stroke-width="0.6">
+          <polygon points="180,334 172,357 188,357"/>
+          <rect x="178" y="357" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="195,354 187,377 203,377"/>
+          <rect x="193" y="377" width="4" height="6" fill="#5a3010" stroke="none"/>
+        </g>
+
+        <!-- S cluster -->
+        <g fill="#265018" stroke="#163008" stroke-width="0.6">
+          <polygon points="274,396 266,419 282,419"/>
+          <rect x="272" y="419" width="4" height="6" fill="#5a3010" stroke="none"/>
+
+          <polygon points="298,404 290,427 306,427"/>
+          <rect x="296" y="427" width="4" height="5" fill="#5a3010" stroke="none"/>
+
+          <polygon points="322,402 314,425 330,425"/>
+          <rect x="320" y="425" width="4" height="5" fill="#5a3010" stroke="none"/>
+        </g>
+
+        <!-- E cluster -->
+        <g fill="#265018" stroke="#163008" stroke-width="0.6">
+          <polygon points="453,250 445,273 461,273"/>
+          <rect x="451" y="273" width="4" height="7" fill="#5a3010" stroke="none"/>
+
+          <polygon points="464,272 456,295 472,295"/>
+          <rect x="462" y="295" width="4" height="7" fill="#5a3010" stroke="none"/>
+        </g>
+
+        <!-- ── MOUNTAIN ── -->
+
+        <!-- Back peak -->
+        <polygon points="280,192  245,272  315,272"
+                 fill="#7a6555" stroke="#5a4535" stroke-width="1.2"/>
+        <!-- Back snow -->
+        <polygon points="280,192  268,218  292,218"
+                 fill="#f0ebe0" stroke="#d0c8a0" stroke-width="0.8" opacity="0.85"/>
+
+        <!-- Front peak -->
+        <polygon points="316,172  270,272  362,272"
+                 fill="#9a8878" stroke="#6a5848" stroke-width="1.5"/>
+
+        <!-- Front hachure shading (right-side shadow lines) -->
+        <line x1="316" y1="172" x2="362" y2="272"
+              stroke="#5a4535" stroke-width="0.9" opacity="0.4"/>
+        <line x1="322" y1="186" x2="356" y2="264"
+              stroke="#5a4535" stroke-width="0.6" opacity="0.28"/>
+        <line x1="329" y1="200" x2="349" y2="256"
+              stroke="#5a4535" stroke-width="0.5" opacity="0.2"/>
+
+        <!-- Front snow cap -->
+        <polygon points="316,172  302,204  330,204"
+                 fill="#f5f0e8" stroke="#d0c8a0" stroke-width="0.8"/>
+
+        <!-- Mountain label -->
+        <text x="316" y="290" text-anchor="middle" font-size="8.5"
+              font-style="italic" fill="rgba(75,45,15,0.6)">Mt. Dittrich</text>
+
+        <!-- ── DOTTED TRAIL TO TREASURE ── -->
+        <path d="M 308,416 C 332,394 364,374 394,354 C 412,342 418,330 422,318"
+              fill="none" stroke="#7a3a0a" stroke-width="2"
+              stroke-dasharray="6,5" stroke-linecap="round" opacity="0.82"/>
+
+        <!-- Footstep dots along trail -->
+        <ellipse cx="328" cy="401" rx="3.5" ry="2"
+                 fill="rgba(95,50,12,0.48)" transform="rotate(-32,328,401)"/>
+        <ellipse cx="350" cy="386" rx="3.5" ry="2"
+                 fill="rgba(95,50,12,0.48)" transform="rotate(-42,350,386)"/>
+        <ellipse cx="373" cy="370" rx="3.5" ry="2"
+                 fill="rgba(95,50,12,0.48)" transform="rotate(-52,373,370)"/>
+        <ellipse cx="394" cy="354" rx="3.5" ry="2"
+                 fill="rgba(95,50,12,0.48)" transform="rotate(-60,394,354)"/>
+        <ellipse cx="409" cy="340" rx="3.5" ry="2"
+                 fill="rgba(95,50,12,0.48)" transform="rotate(-65,409,340)"/>
+
+        <!-- ── X MARKS THE SPOT ── -->
+        <g transform="translate(422,316)">
+          <!-- Drop shadow -->
+          <line x1="-13" y1="-13" x2="13" y2="13"
+                stroke="rgba(0,0,0,0.18)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="13" y1="-13" x2="-13" y2="13"
+                stroke="rgba(0,0,0,0.18)" stroke-width="6" stroke-linecap="round"/>
+          <!-- Bold X -->
+          <line x1="-13" y1="-13" x2="13" y2="13"
+                stroke="#8b0000" stroke-width="3.8" stroke-linecap="round"/>
+          <line x1="13" y1="-13" x2="-13" y2="13"
+                stroke="#8b0000" stroke-width="3.8" stroke-linecap="round"/>
+          <!-- Dashed circle around X -->
+          <circle r="20" fill="none" stroke="#8b0000"
+                  stroke-width="1.2" stroke-dasharray="4,3" opacity="0.65"/>
+        </g>
+
+        <!-- ── MAP TITLE ── -->
+        <text x="350" y="46" text-anchor="middle"
+              font-family="'Cinzel Decorative', serif" font-size="21" font-weight="700"
+              fill="#3b1f07" letter-spacing="2">TREASURE ISLE</text>
+        <line x1="210" y1="53" x2="490" y2="53"
+              stroke="#8b6234" stroke-width="0.8" stroke-opacity="0.5"/>
+
+        <!-- ── COMPASS ROSE ── -->
+        <g transform="translate(624,90)">
+          <!-- Cross hairs -->
+          <line x1="0" y1="-34" x2="0" y2="34"
+                stroke="rgba(80,48,16,0.45)" stroke-width="0.9"/>
+          <line x1="-34" y1="0" x2="34" y2="0"
+                stroke="rgba(80,48,16,0.45)" stroke-width="0.9"/>
+          <!-- Diagonal hairs -->
+          <line x1="-24" y1="-24" x2="24" y2="24"
+                stroke="rgba(80,48,16,0.28)" stroke-width="0.7"/>
+          <line x1="24" y1="-24" x2="-24" y2="24"
+                stroke="rgba(80,48,16,0.28)" stroke-width="0.7"/>
+
+          <!-- Cardinal arrows -->
+          <polygon points="0,-38  4,-14  0,-9 -4,-14" fill="#3b1f07"/>
+          <polygon points="0, 38  4, 14  0, 9 -4, 14" fill="#8b6234"/>
+          <polygon points=" 38,0  14, 4   9,0  14,-4" fill="#8b6234"/>
+          <polygon points="-38,0 -14, 4  -9,0 -14,-4" fill="#8b6234"/>
+
+          <!-- Intercardinal arrows (smaller) -->
+          <polygon points=" 26,-26  10,-18  14,-14  18,-10" fill="#8b6234" opacity="0.55"/>
+          <polygon points=" 26, 26  18, 10  14, 14  10, 18" fill="#8b6234" opacity="0.55"/>
+          <polygon points="-26, 26 -10, 18 -14, 14 -18, 10" fill="#8b6234" opacity="0.55"/>
+          <polygon points="-26,-26 -18,-10 -14,-14 -10,-18" fill="#8b6234" opacity="0.55"/>
+
+          <!-- Center rings -->
+          <circle r="8"  fill="#c9973a" stroke="#3b1f07" stroke-width="1.2"/>
+          <circle r="3.5" fill="#3b1f07"/>
+
+          <!-- Cardinal labels -->
+          <text x="0"  y="-43" text-anchor="middle"
+                font-family="'Cinzel',serif" font-size="12" font-weight="600"
+                fill="#3b1f07">N</text>
+          <text x="0"  y="53" text-anchor="middle"
+                font-family="'Cinzel',serif" font-size="10" fill="#7a4818">S</text>
+          <text x="44" y="4"  text-anchor="start"
+                font-family="'Cinzel',serif" font-size="10" fill="#7a4818">E</text>
+          <text x="-44" y="4" text-anchor="end"
+                font-family="'Cinzel',serif" font-size="10" fill="#7a4818">W</text>
+        </g>
+        <!-- Compass decorative rings -->
+        <circle cx="624" cy="90" r="50" fill="none"
+                stroke="rgba(139,98,52,0.28)" stroke-width="1"/>
+        <circle cx="624" cy="90" r="55" fill="none"
+                stroke="rgba(139,98,52,0.14)" stroke-width="0.8"/>
+
+        <!-- ── COORDINATE FOOTER ── -->
+        <text x="350" y="507" text-anchor="middle"
+              font-family="'Cinzel',serif" font-size="7.5"
+              fill="rgba(100,58,16,0.5)" letter-spacing="2">
+          CHARTED IN THE YEAR OF OUR LORD MMXXVI
+        </text>
+        <text x="350" y="520" text-anchor="middle"
+              font-family="'Cinzel',serif" font-size="7"
+              fill="rgba(100,58,16,0.38)" letter-spacing="1.5">
+          47°32′N · 122°20′W
+        </text>
+
+        <!-- Corner ornaments -->
+        <text x="28"  y="44"  font-size="14" fill="rgba(139,98,52,0.45)">✦</text>
+        <text x="658" y="44"  font-size="14" fill="rgba(139,98,52,0.45)">✦</text>
+        <text x="28"  y="504" font-size="14" fill="rgba(139,98,52,0.45)">✦</text>
+        <text x="658" y="504" font-size="14" fill="rgba(139,98,52,0.45)">✦</text>
+
+      </g><!-- end clip-path group -->
+    </svg>
+  </div>
+
+  <a href="index.html" class="back-link">← Return to the Charter</a>
+
+</body>
+</html>
